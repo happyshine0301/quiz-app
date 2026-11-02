@@ -12,14 +12,15 @@ const question = {
   explanation: "해설",
 };
 
-test("question-papers 폴더의 문제지를 제목과 함께 읽는다", async () => {
+test("question-papers 폴더의 문제지를 모두 제목과 함께 읽는다", async () => {
   const papers = await listQuestionPapers();
-  assert.deepEqual(
-    papers.map((p) => [p.fileName, p.ok && p.quiz.title]),
-    [["sample-questions.json", "중학교 정보과목"]],
-  );
-  const [sample] = papers;
-  assert.equal(sample.ok && sample.quiz.questions.length, 10);
+  for (const paper of papers) {
+    assert.equal(paper.ok, true, `${paper.fileName}을(를) 열 수 없습니다`);
+  }
+  const sample = papers.find((p) => p.fileName === "sample-questions.json");
+  assert.ok(sample?.ok);
+  assert.equal(sample.quiz.title, "중학교 정보과목");
+  assert.equal(sample.quiz.questions.length, 10);
 });
 
 // 여러 문제지가 있는 경우는 프로젝트 밖 임시 폴더에서만 확인하고 바로 지운다.
