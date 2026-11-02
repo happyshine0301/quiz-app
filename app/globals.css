@@ -1,0 +1,402 @@
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --text: #1f2328;
+  --muted: #5b6370;
+  --border: #d6dae0;
+  --primary: #2459d6;
+  --primary-text: #ffffff;
+  --primary-soft: #e8eefc;
+  --correct: #1a7f37;
+  --correct-soft: #e6f4ea;
+  --wrong: #c62828;
+  --wrong-soft: #fdecec;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Malgun Gothic",
+    sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0 0 12px;
+}
+
+p {
+  margin: 0 0 16px;
+}
+
+code {
+  background: var(--bg);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-size: 0.9em;
+}
+
+pre {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* 버튼 */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.button:focus-visible,
+.option:focus-within {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.actions .button {
+  flex: 1;
+}
+
+/* 파일 올리기 */
+.file-button {
+  width: 100%;
+}
+
+.file-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.notice {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.notice ul {
+  margin: 0 0 8px;
+  padding-left: 20px;
+}
+
+.notice.error {
+  background: var(--wrong-soft);
+  border: 1px solid var(--wrong);
+}
+
+.notice.confirm {
+  background: var(--primary-soft);
+  border: 1px solid var(--primary);
+}
+
+.notice.confirm .actions {
+  margin-top: 12px;
+}
+
+.format-help {
+  margin-top: 24px;
+  color: var(--muted);
+}
+
+.format-help summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 32px;
+}
+
+.format-help ul {
+  padding-left: 20px;
+}
+
+/* 문항 확인 */
+.summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 16px 0 20px;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: 10px;
+}
+
+.summary dt {
+  color: var(--muted);
+}
+
+.summary dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* 풀이 */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar div {
+  height: 100%;
+  background: var(--primary);
+}
+
+.question {
+  font-size: 1.2rem;
+  margin: 0 0 20px;
+}
+
+.options {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.option input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.option.selected {
+  border: 2px solid var(--primary);
+  background: var(--primary-soft);
+  padding: 13px 15px;
+}
+
+.option-number {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg);
+  font-weight: 700;
+}
+
+.option.selected .option-number {
+  background: var(--primary);
+  color: var(--primary-text);
+}
+
+.hint {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* 결과 */
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 24px;
+  background: var(--primary-soft);
+  border-radius: 10px;
+}
+
+.score strong {
+  font-size: 2.6rem;
+  line-height: 1.2;
+}
+
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.result-item {
+  border: 1px solid var(--border);
+  border-left-width: 6px;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.result-item.correct {
+  border-left-color: var(--correct);
+}
+
+.result-item.wrong {
+  border-left-color: var(--wrong);
+}
+
+.result-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.result-head h2 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.mark {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-weight: 800;
+}
+
+.correct .mark {
+  background: var(--correct-soft);
+  color: var(--correct);
+}
+
+.wrong .mark {
+  background: var(--wrong-soft);
+  color: var(--wrong);
+}
+
+.result-item dl {
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+}
+
+.result-item dt {
+  color: var(--muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.result-item dd {
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* 휴대폰 */
+@media (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+
+  .container {
+    padding: 12px 12px 32px;
+  }
+
+  .card {
+    padding: 18px 16px;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+  }
+
+  .result-item dl {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .result-item dd {
+    margin-bottom: 8px;
+  }
+}
