@@ -8,13 +8,18 @@ export type Question = {
   explanation: string;
 };
 
+// 문제지 한 개. question-papers 폴더의 JSON 파일 하나에 해당한다.
 export type Quiz = {
+  title: string;
   questions: Question[];
 };
 
 export type ParseResult =
   | { ok: true; quiz: Quiz }
   | { ok: false; errors: string[] };
+
+// 문제지 목록의 한 줄. 열 수 없는 파일도 목록에 흐리게 보여주기 위해 함께 담는다.
+export type PaperEntry = { fileName: string } & ParseResult;
 
 export type QuestionResult = Question & {
   /** 이용자가 고른 보기 번호 1~4, 고르지 않았으면 null */

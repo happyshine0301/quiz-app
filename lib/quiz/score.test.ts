@@ -13,6 +13,7 @@ test("점수는 소수 첫째 자리까지 반올림한다", () => {
 
 test("파일에 있는 정답으로 문항별 정오를 매긴다", () => {
   const quiz: Quiz = {
+    title: "시험용 문제지",
     questions: [1, 2, 3].map((correctAnswer) => ({
       question: `문제 ${correctAnswer}`,
       options: ["가", "나", "다", "라"],

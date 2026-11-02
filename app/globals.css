@@ -122,32 +122,64 @@ pre {
   flex: 1;
 }
 
-/* 파일 올리기 */
-.file-button {
-  width: 100%;
+/* 문제지 목록 */
+.paper-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
 }
 
-.file-button input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
+.paper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+}
+
+button.paper {
+  cursor: pointer;
+}
+
+button.paper:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+button.paper:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.paper-title {
+  font-weight: 700;
+}
+
+.paper-meta,
+.paper-reason {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.paper.broken {
+  opacity: 0.55;
+  background: var(--bg);
 }
 
 .notice {
   margin-top: 20px;
   padding: 16px;
   border-radius: 10px;
-}
-
-.notice ul {
-  margin: 0 0 8px;
-  padding-left: 20px;
-}
-
-.notice.error {
-  background: var(--wrong-soft);
-  border: 1px solid var(--wrong);
 }
 
 .notice.confirm {
@@ -157,21 +189,6 @@ pre {
 
 .notice.confirm .actions {
   margin-top: 12px;
-}
-
-.format-help {
-  margin-top: 24px;
-  color: var(--muted);
-}
-
-.format-help summary {
-  cursor: pointer;
-  font-weight: 600;
-  min-height: 32px;
-}
-
-.format-help ul {
-  padding-left: 20px;
 }
 
 /* 문항 확인 */

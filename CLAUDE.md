@@ -4,14 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 프로젝트 개요
 
-선생님이 만든 JSON 문제 파일을 올려 4지선다 문제를 풀고, 모두 푼 뒤 점수·문항별 정오·해설을 확인하는 교육용 웹앱입니다. 요구사항의 기준 문서는 `PRD.md`입니다. 특히 "1일차 세부 결정 사항" 섹션에 사용자와 합의한 동작이 정리되어 있습니다.
+학생이 `question-papers` 폴더에 미리 준비된 문제지를 목록에서 골라 4지선다 문제를 풀고, 모두 푼 뒤 점수·문항별 정오·해설을 확인하는 교육용 웹앱입니다. 요구사항의 기준 문서는 `PRD.md`입니다. 특히 "1일차 세부 결정 사항" 섹션에 사용자와 합의한 동작이 정리되어 있습니다.
+
+- 초기 버전(커밋 `0c6981e`)은 학생이 JSON 파일을 직접 업로드하는 방식이었습니다. 현재는 폴더의 문제지 목록에서 고르는 방식이며, 학생 업로드 기능은 없습니다. 다시 넣지 않습니다.
 
 - 기술: Next.js + TypeScript, Vercel 배포, PC·휴대폰 모두 지원
 - 화면 언어: 한국어
 
 ## 현재 상태 (2026-11-02 기준)
 
-- 1일차 앱을 만들었고, 내 컴퓨터에서 실행해 확인했습니다. 배포는 하지 않았습니다. Git 저장소는 없습니다.
+- 1일차 앱(문제지 목록 방식)을 만들었고, 내 컴퓨터에서 실행해 확인했습니다. 배포는 하지 않았습니다.
+- Git 저장소가 있습니다(브랜치 `main`, 원격 저장소 없음). 이 폴더에만 커밋 작성자 이름 `happyshine`이 설정되어 있습니다. 사용자가 요청할 때만 커밋합니다.
 - 개발 환경: Windows 11, PowerShell 5.1, Node.js v26.13.0, npm 11.20.0, Git 2.56.0. Next.js 16, React 19, TypeScript 7을 씁니다.
 - 이 세션을 시작할 때 PATH에 Node가 없으면 명령 앞에 다음을 붙입니다: `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')`. PowerShell에서는 `npm` 대신 `npm.cmd`를 씁니다.
 
@@ -25,23 +28,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 구조
 
-- `lib/quiz/`: 화면과 무관한 문제 데이터 규칙입니다. `validate.ts`의 `parseQuizFile`은 파일 글자 내용을 검사해 문제 목록이나 쉬운 한국어 오류 목록을 돌려줍니다. `score.ts`의 `gradeQuiz`는 채점합니다. 2일차의 AI 생성 문제나 저장된 문제도 이 규칙을 그대로 씁니다.
-- `app/page.tsx`: 단계(upload → ready → solving → result)를 관리하는 클라이언트 화면입니다. 각 단계의 화면은 `components/`에 있습니다. 업로드한 파일은 브라우저에서만 읽고 서버로 보내지 않습니다.
+- `question-papers/*.json`: 문제지 파일입니다. 파일 하나가 문제지 하나입니다.
+- `lib/quiz/`: 화면과 무관한 문제 데이터 규칙입니다.
+  - `validate.ts`의 `parseQuizFile`은 문제지 JSON 글자 내용을 검사해 `{ title, questions }`나 쉬운 한국어 오류 목록을 돌려줍니다.
+  - `papers.ts`의 `listQuestionPapers`는 폴더의 `.json` 파일을 파일 이름 순서로 읽습니다. 열 수 없는 파일도 오류와 함께 목록에 남깁니다.
+  - `score.ts`의 `gradeQuiz`는 채점합니다.
+  - 2일차의 AI 생성 문제나 저장된 문제도 이 규칙을 그대로 씁니다.
+- `app/page.tsx`: 서버 컴포넌트입니다. `listQuestionPapers()`로 문제지를 읽어 `components/QuizApp.tsx`에 넘깁니다. 이 페이지는 정적이라 `next build` 때 한 번 읽힙니다. 문제지를 바꾸면 다시 빌드해야 하고, dev에서는 새로고침하면 반영됩니다. `papers.ts`의 `/*turbopackIgnore: true*/` 주석은 빌드 시 프로젝트 전체가 추적되는 경고를 막기 위한 것입니다.
+- `components/QuizApp.tsx`: 단계(list → ready → solving → result)를 관리하는 클라이언트 컴포넌트입니다. 각 단계의 화면은 `components/`의 `PaperListScreen`, `ReadyScreen`, `QuestionScreen`, `ResultScreen`입니다.
 - `QuestionScreen`은 정답·해설을 그리지 않습니다. 채점 전 확인은 브라우저 기본 확인 창 대신 화면 안 확인 상자로 합니다.
 
 ## 구현 범위 구분
 
-- **1일차(지금 만들 것):** JSON 파일 업로드와 검사, 문항 확인, 한 문제씩 풀이, 전체 완료 후 채점, 결과(점수·정오·해설) 표시, 로컬 실행, Vercel 배포. 로그인·AI 문제 생성·DB 저장은 만들지 않습니다.
+- **1일차(지금 만들 것):** `question-papers` 문제지 목록 표시·선택과 검사, 문항 확인, 한 문제씩 풀이, 전체 완료 후 채점, 결과(점수·정오·해설) 표시, 로컬 실행, Vercel 배포. 로그인·AI 문제 생성·DB 저장은 만들지 않습니다.
 - **2일차(나중에 추가할 것):** 교사 Google 로그인, 학생 이름 기반 게스트 입장, Azure AI 문제 생성, 문제 저장·공개와 학생 문제 목록, Firestore 결과 저장, 교사의 학생별 점수·오답·평균 조회.
 - 1일차 코드는 2일차 기능을 붙이기 쉽게 구성하되, 2일차 기능을 미리 구현하지 않습니다.
 
 ## 핵심 규칙 (PRD에서 빠뜨리기 쉬운 부분)
 
-- 문제 파일 형식: 최상위 `questions` 배열이 있고, 각 문항은 `question`, `options`(정확히 4개), `correctAnswer`(1~4, 1이면 첫 번째 보기), `explanation`으로 구성됩니다.
-- 하나라도 잘못된 문항이 있으면 파일 전체를 거부하고, 몇 번 문항이 왜 잘못됐는지 쉬운 말로 보여줍니다.
-- 풀이 중에는 정답 여부·점수·해설이 화면에도, 개발자 도구로 쉽게 보이는 곳에도 드러나지 않게 합니다.
+- 문제지 파일 형식: 최상위에 `title`(목록에 보이는 제목, `questions` 앞에 씀)과 `questions` 배열이 있습니다. 각 문항은 `question`, `options`(정확히 4개), `correctAnswer`(1~4, 1이면 첫 번째 보기), `explanation`으로 구성됩니다.
+- 목록에는 파일 이름이 아니라 각 파일의 `title`을 보여줍니다. 제목을 코드에 고정해서 적지 않습니다.
+- 제목이 없거나 잘못된 문항이 하나라도 있는 파일은 열 수 없습니다. 목록에 흐리게 표시하고 누를 수 없게 하며, 첫 번째 원인을 쉬운 말로 보여줍니다.
+- 풀이 중에는 정답 여부·점수·해설을 화면에 그리지 않습니다. 원본 JSON 접근을 막거나 정답을 숨기는 별도 보호 기능은 만들지 않습니다(사용자 결정).
 - 점수 = 정답 수 ÷ 전체 문항 수 × 100. 소수 첫째 자리까지 반올림하고, 정답 수(예: 2/3)를 함께 표시합니다.
-- 예시 문항을 앱에 고정하거나 자동으로 불러오지 않습니다. `sample-questions.json`은 확인용 별도 파일입니다. 앱에 넣지 않고, 내려받기 기능도 두지 않습니다. 자동 검사(`validate.test.ts`)에서만 읽습니다.
+- 문제지 파일의 문제·보기·정답·해설은 사용자 요청 없이 바꾸지 않습니다. 확인을 위해 `question-papers`에 임의의 문제지를 추가하지 않습니다. 여러 문제지 경우는 `papers.test.ts`가 운영체제 임시 폴더에서만 확인합니다.
 
 ## 작업 원칙
 

@@ -57,8 +57,8 @@ function checkQuestion(item: unknown, number: number): string[] {
   return errors;
 }
 
-// 업로드한 파일의 글자 내용을 읽어 문제 목록으로 바꾼다.
-// 잘못된 문항이 하나라도 있으면 파일 전체를 받지 않는다.
+// 문제지 파일의 글자 내용을 읽어 문제지로 바꾼다.
+// 제목이 없거나 잘못된 문항이 하나라도 있으면 파일 전체를 받지 않는다.
 export function parseQuizFile(text: string): ParseResult {
   let data: unknown;
   try {
@@ -79,12 +79,17 @@ export function parseQuizFile(text: string): ParseResult {
     };
   }
 
-  if (data.questions.length === 0) {
-    return { ok: false, errors: ["파일에 문제가 하나도 없습니다."] };
+  const errors: string[] = [];
+  if (!isFilledString(data.title)) {
+    errors.push("문제지 제목(title)이 비어 있습니다.");
   }
 
-  const errors = data.questions.flatMap((item, index) =>
-    checkQuestion(item, index + 1),
+  if (data.questions.length === 0) {
+    errors.push("파일에 문제가 하나도 없습니다.");
+  }
+
+  errors.push(
+    ...data.questions.flatMap((item, index) => checkQuestion(item, index + 1)),
   );
   if (errors.length > 0) {
     return { ok: false, errors };
@@ -99,5 +104,5 @@ export function parseQuizFile(text: string): ParseResult {
       explanation: q.explanation,
     };
   });
-  return { ok: true, quiz: { questions } };
+  return { ok: true, quiz: { title: data.title as string, questions } };
 }

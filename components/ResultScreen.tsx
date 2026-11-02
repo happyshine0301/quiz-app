@@ -6,10 +6,10 @@ import type { QuizResult } from "@/lib/quiz/types";
 type Props = {
   result: QuizResult;
   onRetry: () => void;
-  onNewFile: () => void;
+  onBack: () => void;
 };
 
-export default function ResultScreen({ result, onRetry, onNewFile }: Props) {
+export default function ResultScreen({ result, onRetry, onBack }: Props) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -60,8 +60,8 @@ export default function ResultScreen({ result, onRetry, onNewFile }: Props) {
       </ol>
 
       <div className="actions">
-        <button type="button" className="button" onClick={onNewFile}>
-          다른 파일 올리기
+        <button type="button" className="button" onClick={onBack}>
+          다른 문제지 고르기
         </button>
         <button type="button" className="button primary" onClick={onRetry}>
           다시 풀기
