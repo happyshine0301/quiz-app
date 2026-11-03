@@ -13,7 +13,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 현재 상태 (2026-11-02 기준)
 
-- 1일차 앱(문제지 목록 방식)을 만들었고, 내 컴퓨터에서 실행해 확인했습니다. 배포는 하지 않았습니다.
+- 1일차 앱(문제지 목록 방식)을 만들었고, 내 컴퓨터에서 실행해 확인했습니다.
+- 2026-11-03 Vercel CLI로 정식 배포했습니다. 계정 `happyshine0301-6728`(Hobby, 무료), 프로젝트 `quiz-app`, 정식 주소 https://quiz-app-two-zeta-40.vercel.app (로그인 없이 열림). 배포마다 생기는 개별 주소는 Vercel 로그인 보호가 걸려 있어 다른 사람에게 주지 않습니다. 이 폴더는 `.vercel`로 프로젝트에 연결되어 있고, 다시 배포하려면 `vercel deploy --prod`를 씁니다(사용자가 요청할 때만).
+- 컴퓨터 이름이 한글(`연수실1-11`)이라 Vercel CLI 로그인·인증 갱신이 "ByteString" 오류로 실패합니다. Vercel 명령 앞에 `$env:NODE_OPTIONS = '--require C:\Users\user\.vercel-fix\ascii-hostname.cjs'`를 붙입니다.
+- `vercel link`는 `.env.local`(Vercel 토큰)을 만들고 `.gitignore`에 줄을 덧붙입니다. 이 앱은 그 토큰을 쓰지 않으므로 지우고 `.gitignore`는 되돌렸습니다.
+- Vercel의 GitHub 연결은 Vercel 계정에 GitHub 로그인 연결이 없어 실패했고, 자동 배포는 연결되어 있지 않습니다.
 - Git 저장소가 있습니다(브랜치 `main`). 이 폴더에만 커밋 작성자 이름 `happyshine`이 설정되어 있습니다. 사용자가 요청할 때만 커밋하고 GitHub에 올립니다.
 - GitHub 원격 저장소: `origin` = https://github.com/happyshine0301/quiz-app (공개, 계정 `happyshine0301`). 공개 저장소라 문제지의 정답·해설과 커밋 이메일이 누구에게나 보입니다(사용자가 알고 선택함).
 - GitHub CLI(`gh`, `C:\Program Files\GitHub CLI\gh.exe`)가 설치되어 있고 `happyshine0301`로 로그인되어 있습니다. 다시 로그인해야 하면 사용자의 터미널 탭이 "Press Enter" 단계에서 멈출 수 있으므로, Claude의 셸에서 `'' | gh auth login --hostname github.com --git-protocol https --web`을 백그라운드로 실행하고 나온 코드를 사용자에게 알려줍니다.
