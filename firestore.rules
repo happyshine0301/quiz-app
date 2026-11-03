@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// 브라우저에서 Firestore를 직접 읽고 쓰는 것을 모두 막는다.
+// 문제지·결과의 저장과 조회는 앱 서버(app/api)가 교사 계정을 확인한 뒤 대신한다.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

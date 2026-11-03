@@ -14,6 +14,22 @@ export type Quiz = {
   questions: Question[];
 };
 
+// 풀이 중 학생에게 보내는 문항. 정답·해설은 빼고 보낸다.
+export type PublicQuestion = Pick<Question, "question" | "options">;
+
+export type PublicQuiz = {
+  id: string;
+  title: string;
+  questions: PublicQuestion[];
+};
+
+// 학생 문제지 목록의 한 줄
+export type PaperSummary = {
+  id: string;
+  title: string;
+  questionCount: number;
+};
+
 export type ParseResult =
   | { ok: true; quiz: Quiz }
   | { ok: false; errors: string[] };

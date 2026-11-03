@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Question } from "@/lib/quiz/types";
+import type { PublicQuestion } from "@/lib/quiz/types";
 
 type Props = {
-  questions: Question[];
+  questions: PublicQuestion[];
   onSubmit: (answers: (number | null)[]) => void;
 };
 
